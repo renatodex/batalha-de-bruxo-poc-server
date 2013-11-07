@@ -14,7 +14,7 @@ var CanvasNpcChild = function(npc_child) {
 
 		_spritesheet = new App.SpriteSheet({
 		     images: [$(npc_sprite).attr('src')],
-             frames: {"regX": 0, "height": npc_frame_height, "count": 16, "regY": 0, "width": npc_frame_width},
+             frames: {"regX": 1, "height": npc_frame_height, "count": 16, "regY": 0, "width": npc_frame_width},
 			 animations: {
 				move_down : {
 					frames: [0,1,2,3]
@@ -68,6 +68,13 @@ var CanvasNpcChild = function(npc_child) {
 			_sprite.gotoAndStop('stand_down');
 		});
 	}
+	
+	// quando o player clicar no mapa, o canvas tem que saber como traduzir essa coordenada para um Vertice do Grid
+	
+	// após obter o array [x,y] do ponto, o evento deve saber o ponto [x-inicial,y-inicial] e o [x-final,y-final],
+	// com isso, uma lib de PathFinding deve saber retornar um Array [x,y] de pontos para onde o herói deve ser movido.
+	
+	// para cada um dos pontos do PathFinding, o evento deve saber como converte-los para X,Y reais e executar uma ação de Tween.
 	
 	var _walk_up = function() {
 		var actual_y = _sprite.y;

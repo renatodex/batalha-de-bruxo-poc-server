@@ -49,7 +49,7 @@ App.init('alcides', function() {
 	var game = FacadeGame.createGame([1,2,3,4], 40);
 	npc_child = game.getTeamA()[0];
 	
-	ControllerNpcChild.render(npc_child, 0, 100)
+	ControllerNpcChild.render(npc_child, 0, 96)
 	
 	App.getTicker().setFPS(80)
 	App.getTicker().on('tick', function(e) {
