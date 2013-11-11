@@ -69,13 +69,6 @@ var CanvasNpcChild = function(npc_child) {
 		});
 	}
 	
-	// quando o player clicar no mapa, o canvas tem que saber como traduzir essa coordenada para um Vertice do Grid
-	
-	// após obter o array [x,y] do ponto, o evento deve saber o ponto [x-inicial,y-inicial] e o [x-final,y-final],
-	// com isso, uma lib de PathFinding deve saber retornar um Array [x,y] de pontos para onde o herói deve ser movido.
-	
-	// para cada um dos pontos do PathFinding, o evento deve saber como converte-los para X,Y reais e executar uma ação de Tween.
-	
 	var _walk_up = function() {
 		var actual_y = _sprite.y;
 		var actual_x = _sprite.x;
@@ -106,20 +99,92 @@ var CanvasNpcChild = function(npc_child) {
 		});
 	}	
 
+	// quando o player clicar no mapa, o canvas tem que saber como traduzir essa coordenada para um Vertice do Grid - OK
+	// após obter o array [x,y] do ponto, o evento deve saber o ponto [x-inicial,y-inicial] e o [x-final,y-final], - OK
+	// com isso, uma lib de PathFinding deve saber retornar um Array [x,y] de pontos para onde o herói deve ser movido. - OK	
+	// para cada um dos pontos do PathFinding, o evento deve saber como converte-los para X,Y reais e executar uma ação de Tween.
+
+	var _walk_path = function(actual_array, destination_array) {
+		var path = new Pathfinding(15,15)
+		movements = path.calculateMove(actual_array, destination_array);
+
+		var animation_instance = new App.Tween.get(_sprite);
+		var previous;
+		_.each(movements, function(next, k) {			
+			animation_instance.to({x:next[0]*32 , y:next[1]*32},150).call(function() {
+				
+				previous = path[k-1] || actual_array;
+				
+				npc_child.setNpcTileX(parseInt(_sprite.x / 32));
+				npc_child.setNpcTileY(parseInt(_sprite.y / 32));	
+				
+				
+				/*
+				x' < x'' => Right
+				x' > x'' => Left
+				y' < y'' => Top
+				y' > y'' => Down
+				*/
+				
+				if(previous[1] < next[1]) {
+					//console.log('move-down')
+					_sprite.gotoAndPlay('move_down');
+				}
+				if(previous[1] > next[1]) {
+					//console.log('move-up')					
+					_sprite.gotoAndPlay('move_up');
+				}
+				if(previous[0] < next[0]) {
+					//console.log('move-right')					
+					_sprite.gotoAndPlay('move_right');	
+				}
+				if(previous[0] > next[0]) {
+					//console.log('move-left')					
+					_sprite.gotoAndPlay('move_left');
+				}
+				
+				console.log('movement -> ', previous, next)
+				
+				if(next[0] == destination_array[0] && next[1] == destination_array[1]) {
+					var unlast = _.last(movements,2)[0];
+					if(unlast[0] < destination_array[0]) {
+						console.log('stand-right')
+						_sprite.gotoAndPlay('stand_right');	
+					}
+					if(unlast[0] > destination_array[0]) {			
+						console.log('stand-left')
+						_sprite.gotoAndStop('stand_left');
+					}
+					if(unlast[1] < destination_array[1]) {		
+						console.log('stand-down')
+						_sprite.gotoAndStop('stand_down');
+					}
+					if(unlast[1] > destination_array[1]) {		
+						console.log('stand-up')
+						_sprite.gotoAndStop('stand_up');
+					}
+				}						
+			})		
+		})
+		
+	
+		
+
+		
+		console.log('animacao setada', npc_child.getNpcTileX(), npc_child.getNpcTileY())		
+	}
+
 	var _move = function(target_x, target_y, duration, callback) {
 		var _duration = duration || 1000;
 		var _callback = callback || function(){};
 		
 		_npc_child.setNpcTileX(target_x);
 		_npc_child.setNpcTileY(target_y);		
+	
 		
 		new App.Tween.get(_sprite).to({ 'y' : target_y, 'x' : target_x}, duration).call(function() {
 			_callback();
 		});
-	}
-	
-	var _move_tick = function() {
-		
 	}
 	
 	_init(npc_child);
@@ -132,6 +197,7 @@ var CanvasNpcChild = function(npc_child) {
 		walkUp:_walk_up,
 		getSprite:function() {
 			return _sprite;
-		}
+		},
+		walkPath:_walk_path
 	}
 }

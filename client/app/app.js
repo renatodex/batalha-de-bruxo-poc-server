@@ -49,13 +49,34 @@ App.init('alcides', function() {
 	var game = FacadeGame.createGame([1,2,3,4], 40);
 	npc_child = game.getTeamA()[0];
 	
-	ControllerNpcChild.render(npc_child, 0, 96)
+	ControllerNpcChild.render(npc_child, 0, 0)
 	
 	App.getTicker().setFPS(80)
 	App.getTicker().on('tick', function(e) {
 		App.update();
 	})
 });
+
+
+
+
+
+
+App.getStage().canvas.addEventListener('click', function(e) {
+	var _destination = [e.layerX, e.layerY]
+	var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
+	var _grid = [parseInt(_destination[0] / 32), parseInt(_destination[1] / 32)-1];	
+
+	npc_child.getCanvas().walkPath(_actual,_grid);
+})
+
+
+
+
+
+
+
+
 
 $( "body" ).keydown(function( event ) {
 	if (event.which == 37) {
