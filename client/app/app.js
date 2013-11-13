@@ -69,6 +69,7 @@ var ws = new WebSocket("ws://192.168.0.11:4000/");
 
 ws.onopen = function() {
  console.log("CONECTED!");
+ ws.send("Heloo World!");
 };
 
 ws.onmessage = function(message) {
