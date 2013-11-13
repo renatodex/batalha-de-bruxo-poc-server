@@ -57,8 +57,6 @@ App.init('alcides', function() {
 	})
 });
 
-
-
 App.getStage().canvas.addEventListener('click', function(e) {
 	var _destination = [e.layerX, e.layerY]
 	var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
@@ -66,5 +64,19 @@ App.getStage().canvas.addEventListener('click', function(e) {
 
 	npc_child.getCanvas().walkPath(_actual,_grid);
 })
+
+var ws = new WebSocket("ws://192.168.0.11:4000/");        
+
+socket.onopen = function() {
+ console.log("CONECTED!");
+};
+
+socket.onmessage = function(message) {
+ 	console.log(message);
+};
+
+socket.onclose = function() {
+ console.log("LOG-OUT!");
+};
 
 
