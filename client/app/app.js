@@ -59,9 +59,6 @@ App.init('alcides', function() {
 
 
 
-
-
-
 App.getStage().canvas.addEventListener('click', function(e) {
 	var _destination = [e.layerX, e.layerY]
 	var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
