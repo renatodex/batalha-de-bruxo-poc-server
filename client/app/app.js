@@ -67,15 +67,15 @@ App.getStage().canvas.addEventListener('click', function(e) {
 
 var ws = new WebSocket("ws://192.168.0.11:4000/");        
 
-socket.onopen = function() {
+ws.onopen = function() {
  console.log("CONECTED!");
 };
 
-socket.onmessage = function(message) {
+ws.onmessage = function(message) {
  	console.log(message);
 };
 
-socket.onclose = function() {
+ws.onclose = function() {
  console.log("LOG-OUT!");
 };
 
