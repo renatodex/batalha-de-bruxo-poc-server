@@ -39,6 +39,7 @@ var Pathfinding = function(grid_width, grid_height) {
 		var finder = new PF.AStarFinder({
 		    allowDiagonal: false
 		});
+		
 		var path = finder.findPath(point_a[0], point_a[1], point_b[0], point_b[1], grid);
 		
 		return path;

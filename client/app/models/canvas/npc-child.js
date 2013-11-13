@@ -15,7 +15,7 @@ var CanvasNpcChild = function(npc_child) {
 
 		_spritesheet = new App.SpriteSheet({
 		     images: [$(npc_sprite).attr('src')],
-             frames: {"regX": 1, "height": npc_frame_height, "count": 16, "regY": 0, "width": npc_frame_width},
+             frames: {"regX": 0, "height": npc_frame_height, "count": 16, "regY": 0, "width": npc_frame_width},
 			 animations: {
 				move_down : {
 					frames: [0,1,2,3]
