@@ -37,8 +37,15 @@ app.get('/', routes.index);
 
 
 server.on('connection', function (socket) {
-  socket.on('message', function () { });
-  socket.on('close', function () { });
+  socket.on('message', function (e) {
+	console.log('asjdksajl')
+	console.log(e);	
+  });
+  
+  socket.on('close', function (e) {
+	console.log('asjdksajl')	
+	console.log(e);
+  });
 });
 
 
