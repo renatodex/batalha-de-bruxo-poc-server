@@ -71,27 +71,3 @@ App.getStage().canvas.addEventListener('click', function(e) {
 })
 
 
-
-
-
-
-
-
-
-$( "body" ).keydown(function( event ) {
-	if (event.which == 37) {
-		npc_child.getCanvas().walkLeft();
-	}
-	
-	if (event.which == 38) {
-		npc_child.getCanvas().walkUp();		
-	}
-	
-	if (event.which == 39)  {
-		npc_child.getCanvas().walkRight();
-	}
-	
-	if (event.which == 40) {
-		npc_child.getCanvas().walkDown();
-	}
-})
