@@ -46,7 +46,7 @@ var App = function() {
 
 
 App.init('alcides', function() {
-	var game = FacadeGame.createGame([1,2,3,4], 40);
+	var game = FacadeGame.createGame([_.random(0,99999),2,3,4], 40);
 	npc_child = game.getTeamA()[0];
 	
 	ControllerNpcChild.render(npc_child)
@@ -69,7 +69,7 @@ App.getStage().canvas.addEventListener('click', function(e) {
   var socket = io.connect('http://192.168.0.11:3000');
 
  socket.on('connect', function () {
- 		socket.emit('retrive-players');
+ 	socket.emit('retrive-players');
     socket.emit('npc-child-create', npc_child.toServer());
   });
 

@@ -15,6 +15,7 @@ var FacadeNpcChild = function() {
 		npc_child.setFrameHeight(_fake_instance['npc_frame_height']);
 		
 		var npc = FacadeNpc.retrieveById(npc_id);
+		npc_child.setNpcId(npc_id)
 		npc_child.setNpc(npc);
 		
 		var canvas = new CanvasNpcChild(npc_child);
