@@ -25,6 +25,16 @@ var Npc = function(id, name, sprite){
 
 		getPowers : function() {
 			return _powers;
+		},
+
+		toServer: function() {
+			return {
+				id : _id,
+				name : _name,
+				sprite : _sprite
+			}
+
 		}
+
 	}
 }
