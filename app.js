@@ -1,4 +1,3 @@
-
 /**
  * Module dependencies.
  */
@@ -6,9 +5,19 @@ var express = require('express');
 var routes = require('./routes');
 var http = require('http');
 var path = require('path');
-var ws = require('websocket.io')
-  , server = ws.listen(4000)
+//var ws = require('websocket.io')
+//  , server = ws.listen(4000)
+var BISON = require('bison')
 var app = express();
+
+
+//var io = require('socket.io').listen(4000);
+var port = 3000//process.env.PORT || 3000;
+var server = app.listen(port, function() {
+	console.log("Express server listening on port %d", port)
+});
+var io = require('socket.io').listen(server);
+
 
 // all environments
 app.engine('html', require('ejs').renderFile);
@@ -29,21 +38,19 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+
 app.get('/', routes.index);
 
-
-server.on('connection', function (socket) {
-  socket.on('message', function (e) {
-	console.log(e);
-	
-	socket.send("x");
-  });
-  
-  socket.on('close', function (e) {
-	console.log(e);
+io.sockets.on('connection', function (socket) {
+  socket.on('npc-child-create', function (name, data) {
+	socket.broadcast.emit('npc-child-create', name, data);
   });
 });
 
-http.createServer(app).listen(app.get('port'), function(){
+
+
+//server.listen(3000);
+
+/*http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
-});
+});*/

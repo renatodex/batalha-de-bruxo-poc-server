@@ -49,7 +49,7 @@ App.init('alcides', function() {
 	var game = FacadeGame.createGame([1,2,3,4], 40);
 	npc_child = game.getTeamA()[0];
 	
-	ControllerNpcChild.render(npc_child, 0, 0)
+	ControllerNpcChild.render(npc_child)
 	
 	App.getTicker().setFPS(80)
 	App.getTicker().on('tick', function(e) {
@@ -65,28 +65,16 @@ App.getStage().canvas.addEventListener('click', function(e) {
 	npc_child.getCanvas().walkPath(_actual,_grid);
 })
 
-var ws = new WebSocket("ws://192.168.0.11:4000/");        
 
-ws.onopen = function() {
-	console.log("CONECTED!");
- 
-	var event_obj = {
-		name : 'npc-child-creat',
-		data : npc_child.toServer()
-	};
+  var socket = io.connect('http://192.168.0.11:3000');
 
-	var nc = BISON.encode(event_obj);
+ socket.on('connect', function () {
+    socket.emit('npc-child-create', npc_child.toServer());
+  });
 
-	ws.send(nc);
-
-};
-
-ws.onmessage = function(message) {
- 	console.log(message);
-};
-
-ws.onclose = function() {
- console.log("LOG-OUT!");
-};
+ socket.on('npc-child-create', function(data) {
+		var new_npc = FacadeNpcChild.createNpcInstance(_.random(0,10000));
+		ControllerNpcChild.render(new_npc, data.npc_tile_x, data.npc_tile_y)
+ });
 
 

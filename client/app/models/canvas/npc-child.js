@@ -81,7 +81,7 @@ var CanvasNpcChild = function(npc_child) {
 				if(next[0] == destination_array[0] && next[1] == destination_array[1]) {
 					_sprite.gotoAndPlay(['stand_',direction].join(''));
 				}					
-				console.log('movement -> ', previous, next)
+				//console.log('movement -> ', previous, next)
 			})		
 		})
 		

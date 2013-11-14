@@ -2,6 +2,9 @@ var ControllerNpcChild = function(){
 	
 	
 	var _render = function(npc_child, x, y){
+		var _x = x || _.random(0,15);
+		var _y = y || _.random(0,15);
+		
 		FacadeNpcChild.isValidMove(npc_child, function(valid){
 			if(valid){
 				npc_child.setNpcTileX(x);
@@ -9,7 +12,7 @@ var ControllerNpcChild = function(){
 
 				App.getStage().addChild(npc_child.getCanvas().getSprite());	
 				
-				npc_child.getCanvas().walkPath([0,0], [_.random(0, 15), _.random(0, 15)]);
+				npc_child.getCanvas().walkPath([0,0],[_x, _y]);
 			}else{
 				return false;
 			}
