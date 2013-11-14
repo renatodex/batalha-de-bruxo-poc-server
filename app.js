@@ -41,9 +41,17 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 
+var multplayer = [];
+
 io.sockets.on('connection', function (socket) {
-  socket.on('npc-child-create', function (name, data) {
-	socket.broadcast.emit('npc-child-create', name, data);
+
+	socket.on('retrive-players', function(){
+		socket.emit('retrive-players', multplayer);
+	});
+
+  socket.on('npc-child-create', function (data) {
+  	multplayer.push(data);
+		socket.broadcast.emit('npc-child-create', data);
   });
 });
 
