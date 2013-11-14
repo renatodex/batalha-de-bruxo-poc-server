@@ -68,8 +68,17 @@ App.getStage().canvas.addEventListener('click', function(e) {
 var ws = new WebSocket("ws://192.168.0.11:4000/");        
 
 ws.onopen = function() {
- console.log("CONECTED!");
- ws.send("Heloo World!");
+	console.log("CONECTED!");
+ 
+	var event_obj = {
+		name : 'npc-child-creat',
+		data : npc_child.toServer()
+	};
+
+	var nc = BISON.encode(event_obj);
+
+	ws.send(nc);
+
 };
 
 ws.onmessage = function(message) {
