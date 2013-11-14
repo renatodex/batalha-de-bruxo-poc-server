@@ -8,6 +8,8 @@ var ControllerNpcChild = function(){
 				npc_child.setNpcTileY(y);
 
 				App.getStage().addChild(npc_child.getCanvas().getSprite());	
+				
+				npc_child.getCanvas().walkPath([0,0], [_.random(0, 15), _.random(0, 15)]);
 			}else{
 				return false;
 			}

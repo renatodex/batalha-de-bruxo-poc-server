@@ -35,7 +35,8 @@ app.get('/', routes.index);
 server.on('connection', function (socket) {
   socket.on('message', function (e) {
 	console.log(e);
-	socket.send("Hi I'm the Server");
+	
+	socket.send("x");
   });
   
   socket.on('close', function (e) {
