@@ -72,6 +72,13 @@ var NpcChild = function(hp, npc_tile_x, npc_tile_y, game_id){
 		},
 		getCanvas : function() {
 			return _canvas;
+		},
+		toServer: function() {
+			return {
+				frameHeight: _frame_height,
+				frameWidth: _frame_width,
+				npcSpriteX: _npc_sprite_x
+			}
 		}
 	}
 }

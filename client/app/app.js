@@ -73,7 +73,7 @@ ws.onopen = function() {
 };
 
 ws.onmessage = function(message) {
- 	console.log(message.data);
+ 	console.log(message);
 };
 
 ws.onclose = function() {
