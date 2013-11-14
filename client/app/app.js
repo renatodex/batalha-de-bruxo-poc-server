@@ -69,18 +69,23 @@ App.getStage().canvas.addEventListener('click', function(e) {
   var socket = io.connect('http://192.168.0.11:3000');
 
  socket.on('connect', function () {
- 		socket.emit('retrive-players');
     socket.emit('npc-child-create', npc_child.toServer());
   });
 
  socket.on('retrive-players', function(data){
- 		var new_npc = FacadeNpcChild.createNpcInstance(_.random(0,10000));
-		ControllerNpcChild.render(new_npc, data.npc_tile_x, data.npc_tile_y);
+ 		_.each(data, function(v, k){
+	 		if(v.npc_id != npc_child.getNpcId){
+		 		var new_npc = FacadeNpcChild.createNpcInstance(v);
+				ControllerNpcChild.render(new_npc, data.npc_tile_x, data.npc_tile_y);
+			}
+		});
  });
 
  socket.on('npc-child-create', function(data) {
 		var new_npc = FacadeNpcChild.createNpcInstance(_.random(0,10000));
-		ControllerNpcChild.render(new_npc, data.npc_tile_x, data.npc_tile_y)
+		ControllerNpcChild.render(new_npc, data.npc_tile_x, data.npc_tile_y);
+
+		socket.emit('retrive-players');
  });
 
 
