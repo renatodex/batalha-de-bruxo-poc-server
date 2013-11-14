@@ -9,6 +9,7 @@ var NpcChild = function(hp, npc_tile_x, npc_tile_y, game_id){
 			_game_id = game_id,
 			_frame_width = 0,
 			_frame_height = 0,
+			_npc_id = 0,
 			_canvas = {};
 
 	return{
@@ -20,6 +21,9 @@ var NpcChild = function(hp, npc_tile_x, npc_tile_y, game_id){
 		},
 		getNpcId : function(){
 			return _npc_id;
+		},
+		setNpcId : function(npc_id) {
+			_npc_id = npc_id;
 		},
 		getHp : function(){
 			return _hp;
@@ -75,6 +79,7 @@ var NpcChild = function(hp, npc_tile_x, npc_tile_y, game_id){
 		},
 		toServer: function() {
 			return {
+				npc_id		 : _npc_id,
 				npc          : _npc.toServer(),
 				npc_tile_y   : _npc_tile_y,
 				npc_tile_x   : _npc_tile_x,
