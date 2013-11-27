@@ -1,18 +1,18 @@
 var ControllerNpcChild = function(){
 	
 	
-	var _render = function(npc_child, x, y){
+	var _render = function(npc_instance, x, y){
 		var _x = x || _.random(0,15);
 		var _y = y || _.random(0,15);
 		
-		FacadeNpcChild.isValidMove(npc_child, function(valid){
+		FacadeNpcChild.isValidMove(npc_instance, function(valid){
 			if(valid){
-				npc_child.setNpcTileX(x);
-				npc_child.setNpcTileY(y);
+				npc_instance.setNpcTileX(x);
+				npc_instance.setNpcTileY(y);
 
-				App.getStage().addChild(npc_child.getCanvas().getSprite());	
+				App.getStage().addChild(npc_instance.getCanvas().getSprite());	
 				
-				npc_child.getCanvas().walkPath([0,0],[_x, _y]);
+				npc_instance.getCanvas().walkPath([0,0],[_x, _y]);
 			}else{
 				return false;
 			}

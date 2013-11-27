@@ -6,16 +6,60 @@
 	
 	<body>
 		<style>
+			* {
+				font-family:Helvetica;
+			}
+		
 			.grid {
 				position:absolute;
 				background-image:url('../app/assets/images/grid-2.png');
 				width:502px;
 				height:502px;
-				opacity:0.2;
+				opacity:0.4;
 				pointer-events:none;
+				z-index:1;
+			}
+			
+			.login {
+				width:502px;
+				height:502px;
+				position:absolute;
+				background-color:#ccc;
+				border:2px solid #000;
+				z-index:2;
+				padding:10px 20px 10px 20px;
+				box-sizing:border-box;
+			}
+			
+			.login .register {
+				border-top:1px dashed #eee;
 			}
 		</style>
 		
+		<div class="login">
+			<h1>Batalha dos Bruxos</h1>
+			
+			<p>Tem cadastro? Faça login abaixo:</p>
+			
+			<form>
+				<label>Email: <input type="text" name="email" class="email" /></label>
+				<label>Password: <input type="password" name="password" class="password" /></label>				
+				<button class="login-button">acessar</button>
+			</form>
+			
+			<div class="register">
+				<form>
+					<h2>Não tem cadastro? Crie sua conta!</h2>
+					<label>Nome: <input type="text" name="name" class="name" /></label><br/>
+					<label>Email: <input type="text" name="email" class="email" /></label><br/>
+					<label>Senha: <input type="text" name="password" class="password" /></label><br/>
+					<br/>
+					<button class="login-button">criar minha conta</button>	
+				</form>					
+			</div>
+		</div>
+	
+	
 		<div class="grid"></div>
 		<canvas id="alcides" width="500" height="500" style="border:1px solid #000"></canvas>
 		<script src="socket.io/socket.io.js"></script>
@@ -39,7 +83,7 @@
 		<script src="../app/models/facade/power.js"></script>
 		<script src="../app/models/facade/npc-child.js"></script>	
 		<script src="../app/models/facade/map.js"></script>	
-		<script src="../app/models/facade/map-handler.js"></script>				
+		<!--<script src="../app/models/facade/map-handler.js"></script>	-->			
 		<script src="../app/models/facade/game.js"></script>
 				
 		<script src="../app/models/canvas/npc-child.js"></script>

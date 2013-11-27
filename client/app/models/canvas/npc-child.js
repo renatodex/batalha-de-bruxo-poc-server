@@ -1,17 +1,17 @@
-var CanvasNpcChild = function(npc_child) {	
+var CanvasNpcChild = function(npc_instance) {	
 	
-	var _npc_child;
+	var _npc_instance;
 	var _sprite;
 	var _spritesheet;
 	var _tween;
 	
-	var _init = function(npc_child) {
-		_npc_child = npc_child;
+	var _init = function(npc_instance) {
+		_npc_instance = npc_instance;
 		
-		var npc_frame_width = npc_child.getFrameWidth();
-		var npc_frame_height = npc_child.getFrameHeight();		
+		var npc_frame_width = npc_instance.getFrameWidth();
+		var npc_frame_height = npc_instance.getFrameHeight();		
 		
-		var npc_sprite = App.getLoader().getResult(npc_child.getNpc().getSprite());	
+		var npc_sprite = App.getLoader().getResult(npc_instance.getNpc().getSprite());	
 
 		_spritesheet = new App.SpriteSheet({
 		     images: [$(npc_sprite).attr('src')],
@@ -85,7 +85,7 @@ var CanvasNpcChild = function(npc_child) {
 			})		
 		})
 		
-		console.log('animacao setada', npc_child.getNpcTileX(), npc_child.getNpcTileY())		
+		console.log('animacao setada', npc_instance.getNpcTileX(), npc_instance.getNpcTileY())		
 	}
 	
 	var _whichDirection = function(previous, next) {
@@ -110,15 +110,15 @@ var CanvasNpcChild = function(npc_child) {
 		var _duration = duration || 150;
 		var _callback = callback || function(){};
 		
-		_npc_child.setNpcTileX(parseInt(target_x / 32));
-		_npc_child.setNpcTileY(parseInt(target_y / 32));				
+		_npc_instance.setNpcTileX(parseInt(target_x / 32));
+		_npc_instance.setNpcTileY(parseInt(target_y / 32));				
 		
 		instance.to({ 'y' : target_y, 'x' : target_x}, duration).call(function() {
 			_callback();
 		});
 	}
 	
-	_init(npc_child);
+	_init(npc_instance);
 	
 	return {
 		move:_move,

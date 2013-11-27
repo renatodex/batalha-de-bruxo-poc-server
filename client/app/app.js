@@ -46,38 +46,25 @@ var App = function() {
 
 
 App.init('alcides', function() {
-	var game = FacadeGame.createGame([_.random(0,99999),2,3,4], 40);
-	npc_child = game.getTeamA()[0];
-	
-	ControllerNpcChild.render(npc_child)
-	
 	App.getTicker().setFPS(80)
 	App.getTicker().on('tick', function(e) {
 		App.update();
 	})
 });
 
-App.getStage().canvas.addEventListener('click', function(e) {
-	var _destination = [e.layerX, e.layerY]
-	var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
-	var _grid = [parseInt(_destination[0] / 32), parseInt(_destination[1] / 32)-1];	
-
-	npc_child.getCanvas().walkPath(_actual,_grid);
-})
-
-
-  var socket = io.connect('http://192.168.0.11:3000');
+var socket = io.connect('http://192.168.0.11:3000');
+ /*
 
  socket.on('connect', function () {
 
- 		socket.emit('retrive-players');
+ 	socket.emit('retrive-players');
     socket.emit('npc-child-create', npc_child.toServer());
   });
 
  socket.on('retrive-players', function(data){
  		_.each(data, function(v, k){
 	 		if(v.npc_id != npc_child.getNpcId){
-		 		var new_npc = FacadeNpcChild.createNpcInstance(v);
+		 		var new_npc = FacadeNpcChild.createNpcInstance(v.npc_id);
 				ControllerNpcChild.render(new_npc, data.npc_tile_x, data.npc_tile_y);
 			}
 		});
@@ -86,8 +73,77 @@ App.getStage().canvas.addEventListener('click', function(e) {
  socket.on('npc-child-create', function(data) {
 		var new_npc = FacadeNpcChild.createNpcInstance(_.random(0,10000));
 		ControllerNpcChild.render(new_npc, data.npc_tile_x, data.npc_tile_y);
+ });*/
 
-		socket.emit('retrive-players');
- });
+socket.on('error', function(message) {
+	alert(message);
+})
 
+socket.on('logon', function(npc_data) {
+	$('.login').fadeOut();
+	console.log('Vamos ver o data...', npc_data)
+	
+	if(npc_data) {
+		// caso não coberto
+	} else {	
+		console.log('FIRST TIME ON')	
+		window.npc_child = FacadeNpcChild.createNpcInstance(_.random(0,99999));
+		npc_child.setAccountEmail($('.email').val());		
+		ControllerNpcChild.render(npc_child);
+		socket.emit('npc-child-create', npc_child.toServer())
+		
+		App.getStage().canvas.addEventListener('click', function(e) {
+			var _destination = [e.layerX, e.layerY]
+			var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
+			var _grid = [parseInt(_destination[0] / 32), parseInt(_destination[1] / 32)-1];	
+
+			npc_child.getCanvas().walkPath(_actual,_grid);
+		})
+				
+		socket.emit('retrieve-players', npc_child.getAccountEmail());
+		
+		
+		
+		display_list = [];
+		socket.on('update-players', function(npc_childs){
+		 	_.each(npc_childs, function(v, k){
+			 		if(v.npc_id != npc_child.getNpcId){
+				 		var new_npc = FacadeNpcChild.createNpcInstance(v.npc_id);
+						new_npc.setAccountEmail(v.account_email);
+						display_list.push(new_npc);
+						ControllerNpcChild.render(new_npc, v.npc_tile_x, v.npc_tile_y);
+					}
+			});
+		});
+
+		socket.on('player-connected', function(npc_instance) {
+			var new_npc = FacadeNpcChild.createNpcInstance(npc_instance.npc_id);
+			new_npc.setAccountEmail(npc_instance.account_email);
+			display_list.push(new_npc);
+			ControllerNpcChild.render(new_npc, npc_instance.npc_tile_x, npc_instance.npc_tile_y);
+		});
+
+		socket.on('player-disconnected', function(email) {
+			console.log('JOGADOR DESCONECTOU', email);
+			console.log(display_list);
+			_.each(display_list, function(v,k) {
+				if(v.getAccountEmail() == email) {
+					App.getStage().removeChild(v.getCanvas().getSprite());
+				}
+			})
+		});		
+	}
+})
+
+$('.login-button').bind('click', function(e) {
+	e.preventDefault();
+	var email = $('.email').first().val();
+	var password = $('.password').val();
+	socket.emit('login', email, password);
+})
+
+$( window ).unload(function() {
+	var email = npc_child.getAccountEmail() || false;
+	socket.emit('disconnect-player', email);
+});
 

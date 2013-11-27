@@ -10,9 +10,16 @@ var NpcChild = function(hp, npc_tile_x, npc_tile_y, game_id){
 			_frame_width = 0,
 			_frame_height = 0,
 			_npc_id = 0,
+			_email = '',
 			_canvas = {};
 
 	return{
+		setAccountEmail : function(email) {
+			_email = email;
+		},
+		getAccountEmail : function() {
+			return _email;
+		},
 		setNpc : function(npc){
 			_npc = npc;
 		},
@@ -79,6 +86,7 @@ var NpcChild = function(hp, npc_tile_x, npc_tile_y, game_id){
 		},
 		toServer: function() {
 			return {
+				account_email : _email,
 				npc_id		 : _npc_id,
 				npc          : _npc.toServer(),
 				npc_tile_y   : _npc_tile_y,
