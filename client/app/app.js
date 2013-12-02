@@ -93,16 +93,26 @@ socket.on('logon', function(npc_data) {
 		socket.emit('npc-child-create', npc_child.toServer())
 		
 		App.getStage().canvas.addEventListener('click', function(e) {
-			var _destination = [e.layerX, e.layerY]
+			var _destination = [parseInt(e.layerX/32), parseInt(e.layerY/32) -1]
 			var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
-			var _grid = [parseInt(_destination[0] / 32), parseInt(_destination[1] / 32)-1];	
 
-			npc_child.getCanvas().walkPath(_actual,_grid);
+			npc_child.getCanvas().walkPath(_actual,_destination);
+			
+			socket.emit('update-position', npc_child.getAccountEmail(), _destination[0], _destination[1]);
 		})
 				
 		socket.emit('retrieve-players', npc_child.getAccountEmail());
 		
 		
+		socket.on('update-position', function(email, x, y) {
+			_.each(display_list, function(v,k) {
+				if(v.getAccountEmail() == email) {
+					var _actual = [v.getNpcTileX(), v.getNpcTileY()]
+					var _destination = [x, y];
+					v.getCanvas().walkPath(_actual, _destination);
+				}
+			})		
+		});
 		
 		display_list = [];
 		socket.on('update-players', function(npc_childs){

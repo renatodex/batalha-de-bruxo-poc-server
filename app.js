@@ -128,6 +128,11 @@ io.sockets.on('connection', function (socket) {
 			socket.broadcast.emit('player-disconnected', email)
 		}
 	})
+	
+  socket.on('update-position', function(email, x, y) {
+	console.log('UPDATE POSITION...', email, x, y);
+	socket.broadcast.emit('update-position', email, x, y);
+  })
 
   socket.on('npc-child-create', function (data) {
   		NpcChilds.add(data);
