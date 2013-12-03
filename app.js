@@ -60,7 +60,7 @@ Accounts.add({
 })
 Accounts.add({
     name: 'Pipo',
-    email: 'pipobizelli@gmail.com',
+    email: 'pipo',
     password: '202020'
 })
 Accounts.add({

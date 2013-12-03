@@ -52,7 +52,7 @@ App.init('alcides', function() {
 	})
 });
 
-var socket = io.connect('http://192.168.0.12:3000');
+var socket = io.connect('http://192.168.0.11:3000');
  /*
 
  socket.on('connect', function () {

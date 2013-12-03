@@ -63,7 +63,7 @@ var CanvasNpcChild = function(npc_instance) {
 
 	var _walk_path = function(actual_array, destination_array) {
 		var path = new Pathfinding(15,15)
-		movements = path.calculateMove(actual_array, destination_array);
+		var movements = path.calculateMove(actual_array, destination_array);
 
 		var previous, direction;
 		var destiny_x;

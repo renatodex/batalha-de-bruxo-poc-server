@@ -17,26 +17,33 @@ var CanvasHadouken = function(x, y) {
 		 });
 		
 		_sprite = new App.Sprite(_spritesheet);
-		_tween = new App.Tween(_sprite);
 		
 		return _sprite;
 	};
 
 	var _walk_path = function(actual_array) {
 		var path = new Pathfinding(15, 15);
+		
+		// O Tween precisa ser gerado depois que o Objeto está printado na Tela pro createJS ter uma referencia pra mover
+		// Se o Tween instanciar antes disso, é como se voce estivesse movendo um objeto invisivel na tela
+		
+		var tween = new App.Tween(_sprite);
+		
 		var destination_array = actual_array;
-
 		destination_array[0] += _duration;
 
 		var movements = path.calculateMove(actual_array, destination_array);
+		
+		_.each(movements, function(v, k) {
+			_move(tween, v[0]*32, v[1]*32, 600, function() {
+				console.log('ANDOU..', v)
+			})
+		})
 	};
 
 	var _move = function(instance, target_x, target_y, duration, callback) {
 		var _duration = duration || 150;
 		var _callback = callback || function(){};
-		
-		_npc_instance.setNpcTileX(parseInt(target_x / 32));
-		_npc_instance.setNpcTileY(parseInt(target_y / 32));				
 		
 		instance.to({ 'y' : target_y, 'x' : target_x}, duration).call(function() {
 			_callback();
@@ -46,9 +53,14 @@ var CanvasHadouken = function(x, y) {
 	_init();
 	
 	return {
+		move:_move,
 		init:_init,
 		getSprite:function() {
 			return _sprite;
-		}
+		},
+		getTween:function() {
+			return _tween;
+		},
+		walk_path:_walk_path
 	}
 }
