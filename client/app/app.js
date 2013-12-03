@@ -52,7 +52,7 @@ App.init('alcides', function() {
 	})
 });
 
-var socket = io.connect('http://192.168.0.11:3000');
+var socket = io.connect('http://192.168.0.12:3000');
  /*
 
  socket.on('connect', function () {
@@ -78,6 +78,7 @@ var socket = io.connect('http://192.168.0.11:3000');
 socket.on('error', function(message) {
 	alert(message);
 })
+var display_list = [];
 
 socket.on('logon', function(npc_data) {
 	$('.login').fadeOut();
@@ -90,6 +91,7 @@ socket.on('logon', function(npc_data) {
 		window.npc_child = FacadeNpcChild.createNpcInstance(_.random(0,99999));
 		npc_child.setAccountEmail($('.email').val());		
 		ControllerNpcChild.render(npc_child);
+		display_list.push(npc_child);
 		socket.emit('npc-child-create', npc_child.toServer())
 		
 		App.getStage().canvas.addEventListener('click', function(e) {
@@ -114,7 +116,6 @@ socket.on('logon', function(npc_data) {
 			})		
 		});
 		
-		display_list = [];
 		socket.on('update-players', function(npc_childs){
 		 	_.each(npc_childs, function(v, k){
 			 		if(v.npc_id != npc_child.getNpcId){

@@ -36,8 +36,16 @@ var CanvasHadouken = function(x, y) {
 		
 		_.each(movements, function(v, k) {
 			_move(tween, v[0]*32, v[1]*32, 600, function() {
-				console.log('ANDOU..', v)
-			})
+
+				console.log('ANDOU..', v);
+
+				var last = _.last(movements);
+
+				if(last == v){
+					App.getStage().removeChild(_sprite);
+				}
+
+			});
 		})
 	};
 
