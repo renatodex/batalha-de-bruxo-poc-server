@@ -3,7 +3,7 @@ var CanvasHadouken = function(x, y) {
 	var _spritesheet;
 	var _sprite;
 	var _tween;
-	var _duration = 4;
+	var _duration = 8;
 	
 	var _init = function(x, y) {
 		_spritesheet = new App.SpriteSheet({
@@ -17,12 +17,30 @@ var CanvasHadouken = function(x, y) {
 		 });
 		
 		_sprite = new App.Sprite(_spritesheet);
+		_sprite.x = x*32;
+		_sprite.y = (y+1)*32;
+		
+		_sprite.addEventListener('tick', function() {
+			_.each(display_list, function(npc, k) {
+				var _x = parseInt(npc.getCanvas().getSprite().x/32);
+				var _y = parseInt(npc.getCanvas().getSprite().y/32)+1;		
+				
+				if(parseInt(_sprite.x/32) == _x && parseInt(_sprite.y/32) == _y) {
+					console.log('HADOUKEN HIT');
+					App.getStage().removeChild(_sprite);
+				}
+			});			
+		})	
 		
 		return _sprite;
 	};
 
-	var _walk_path = function(actual_array) {
+	var _cast = function() {
 		var path = new Pathfinding(15, 15);
+		
+		var actual_array = [];
+		actual_array[0] = parseInt(_sprite.x/32);
+		actual_array[1] = parseInt(_sprite.y/32);
 		
 		// O Tween precisa ser gerado depois que o Objeto está printado na Tela pro createJS ter uma referencia pra mover
 		// Se o Tween instanciar antes disso, é como se voce estivesse movendo um objeto invisivel na tela
@@ -41,6 +59,12 @@ var CanvasHadouken = function(x, y) {
 
 				var last = _.last(movements);
 
+
+				_.each(display_list, function(npc, k) {
+					
+				})
+
+
 				if(last == v){
 					App.getStage().removeChild(_sprite);
 				}
@@ -58,7 +82,7 @@ var CanvasHadouken = function(x, y) {
 		});
 	}
 	
-	_init();
+	_init(x,y);
 	
 	return {
 		move:_move,
@@ -69,6 +93,6 @@ var CanvasHadouken = function(x, y) {
 		getTween:function() {
 			return _tween;
 		},
-		walk_path:_walk_path
+		cast:_cast
 	}
 }

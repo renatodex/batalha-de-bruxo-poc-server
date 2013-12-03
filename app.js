@@ -129,6 +129,10 @@ io.sockets.on('connection', function (socket) {
 		}
 	})
 	
+  socket.on('cast-hadouken', function(email) {
+	socket.broadcast.emit('cast-hadouken', email);
+  })
+	
   socket.on('update-position', function(email, x, y) {
 	console.log('UPDATE POSITION...', email, x, y);
 	socket.broadcast.emit('update-position', email, x, y);

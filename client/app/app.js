@@ -52,7 +52,7 @@ App.init('alcides', function() {
 	})
 });
 
-var socket = io.connect('http://192.168.0.12:3000');
+var socket = io.connect('http://192.168.0.11:3000');
  /*
 
  socket.on('connect', function () {
@@ -146,6 +146,20 @@ socket.on('logon', function(npc_data) {
 	}
 })
 
+function castHadouken(x, y) {
+	var golpe = new CanvasHadouken(x+1, y);
+	App.getStage().addChild(golpe.getSprite());
+	golpe.cast();	
+}
+
+socket.on('cast-hadouken', function(email) {
+	_.each(display_list, function(v,k) {
+		if(v.getAccountEmail() == email) {
+			castHadouken(v.getNpcTileX(), v.getNpcTileY());
+		}
+	})	
+});
+
 $('.login-button').bind('click', function(e) {
 	e.preventDefault();
 	var email = $('.email').first().val();
@@ -157,4 +171,11 @@ $( window ).unload(function() {
 	var email = npc_child.getAccountEmail() || false;
 	socket.emit('disconnect-player', email);
 });
+
+$('body').bind('keydown', function(e) {
+	if(e.keyCode == 32) {
+		castHadouken(npc_child.getNpcTileX(), npc_child.getNpcTileY());
+		socket.emit('cast-hadouken', $('.email').val());
+	}
+})
 

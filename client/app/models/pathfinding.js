@@ -34,25 +34,7 @@ var Pathfinding = function(grid_width, grid_height) {
 	}
 	
 	var _calculateMove = function(point_a, point_b) {
-		var grid = new PF.Grid(_grid_width, _grid_height)
-		grid.setWalkableAt(9, 9, false);
-		grid.setWalkableAt(10, 9, false);
-		grid.setWalkableAt(11, 9, false);
-		grid.setWalkableAt(12, 9, false);						
-		grid.setWalkableAt(9, 10, false);
-		grid.setWalkableAt(10, 10, false);
-		grid.setWalkableAt(11, 10, false);
-		grid.setWalkableAt(12, 10, false);
-		
-		grid.setWalkableAt(9, 11, false);
-		grid.setWalkableAt(10, 11, false);
-		grid.setWalkableAt(11, 11, false);
-		grid.setWalkableAt(12, 11, false);
-		
-		grid.setWalkableAt(9, 12, false);
-		grid.setWalkableAt(10, 12, false);
-		grid.setWalkableAt(11, 12, false);
-		grid.setWalkableAt(12, 12, false);					
+		var grid = new PF.Grid(_grid_width, _grid_height)					
 		
 		var finder = new PF.AStarFinder({
 		    allowDiagonal: false
