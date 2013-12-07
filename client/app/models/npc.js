@@ -1,7 +1,8 @@
-var Npc = function(id, name, sprite){
+var Npc = function(id, name, sprite, max_hp){
 	var _id = id,
 		_name = name,
 		_sprite = sprite,
+		_max_hp = max_hp,
 		_powers = [];
 
 	return {
@@ -12,6 +13,14 @@ var Npc = function(id, name, sprite){
 		
 		getName : function(){
 			return _name;
+		},
+
+		getMaxHp : function() {
+			return _max_hp;
+		},
+		
+		setMaxHp  : function(value) {
+			_max_hp = value;
 		},
 
 		getSprite : function(){
@@ -31,7 +40,8 @@ var Npc = function(id, name, sprite){
 			return {
 				id : _id,
 				name : _name,
-				sprite : _sprite
+				sprite : _sprite,
+				max_hp : _max_hp
 			}
 
 		}
