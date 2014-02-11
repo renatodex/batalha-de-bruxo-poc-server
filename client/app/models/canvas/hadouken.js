@@ -3,7 +3,7 @@ var CanvasHadouken = function(x, y) {
 	var _spritesheet;
 	var _sprite;
 	var _tween;
-	var _duration = 8;
+	var _duration = 3;
 	
 	var _init = function(x, y) {
 		_spritesheet = new App.SpriteSheet({
