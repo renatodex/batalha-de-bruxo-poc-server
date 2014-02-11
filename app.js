@@ -69,6 +69,12 @@ Accounts.add({
     password: '101010'
 })
 
+Accounts.add({
+	name: 'Julia',
+	email: 'julia',
+	password: 'renato21'
+})
+
 var Npc = Backbone.Model.extend({
 	defaults : {
 		id : '',

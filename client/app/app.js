@@ -52,6 +52,11 @@ App.init('alcides', function() {
 	})
 });
 
+$('body').bind('mousemove', function(e) {
+	//console.log(e.clientX, e.clientY);
+	//console.log('global=', App.getStage().globalToLocal(e.clientX, e.clientY));
+})
+
 var socket = io.connect('http://192.168.0.11:3000');
  /*
 
