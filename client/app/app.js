@@ -52,7 +52,16 @@ App.init('alcides', function() {
 	})
 });
 
+<<<<<<< HEAD
 var socket = io.connect('http://192.168.0.13:3000');
+=======
+$('body').bind('mousemove', function(e) {
+	//console.log(e.clientX, e.clientY);
+	//console.log('global=', App.getStage().globalToLocal(e.clientX, e.clientY));
+})
+
+var socket = io.connect('http://192.168.0.11:3000');
+>>>>>>> 0d8ca5940abba1069e7584cb5752c83439d5f7ec
  /*
 
  socket.on('connect', function () {
