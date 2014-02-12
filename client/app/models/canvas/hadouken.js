@@ -4,6 +4,7 @@ var CanvasHadouken = function(x, y) {
 	var _sprite;
 	var _tween;
 	var _duration = 3;
+	var _damage = 30;
 	
 	var _init = function(x, y) {
 		_spritesheet = new App.SpriteSheet({
@@ -23,10 +24,10 @@ var CanvasHadouken = function(x, y) {
 		_sprite.addEventListener('tick', function() {
 			_.each(display_list, function(npc, k) {
 				var _x = parseInt(npc.getCanvas().getSprite().x/32);
-				var _y = parseInt(npc.getCanvas().getSprite().y/32)+1;		
+				var _y = parseInt(npc.getCanvas().getSprite().y/32)+1;
 				
 				if(parseInt(_sprite.x/32) == _x && parseInt(_sprite.y/32) == _y) {
-					console.log('HADOUKEN HIT');
+					ControllerDamage.apply(npc.getCanvas(), _damage);
 					App.getStage().removeChild(_sprite);
 				}
 			});			
@@ -58,12 +59,6 @@ var CanvasHadouken = function(x, y) {
 				console.log('ANDOU..', v);
 
 				var last = _.last(movements);
-
-
-				_.each(display_list, function(npc, k) {
-					
-				})
-
 
 				if(last == v){
 					App.getStage().removeChild(_sprite);
