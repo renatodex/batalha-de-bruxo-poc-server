@@ -35,6 +35,9 @@ var NpcChild = function(hp, npc_tile_x, npc_tile_y, game_id){
 		getHp : function(){
 			return _hp;
 		},
+		setHp : function(value) {
+		  _hp = value;
+		},
 		getNpcTileX : function(){
 			return _npc_tile_x;
 		},

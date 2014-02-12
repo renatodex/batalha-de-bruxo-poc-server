@@ -4,6 +4,7 @@ var CanvasNpcChild = function(npc_instance) {
 	var _sprite;
 	var _spritesheet;
 	var _tween;
+	var _hp_bar;
 	
 	var _init = function(npc_instance) {
 		_npc_instance = npc_instance;
@@ -50,6 +51,10 @@ var CanvasNpcChild = function(npc_instance) {
 		_sprite = new App.Sprite(_spritesheet);
 		_tween = new App.Tween.get(_sprite)
 		
+		var hp_atual = _npc_instance.getHp();
+		var hp_max = _npc_instance.getNpc().getMaxHp();
+		_hp_bar = new HpBar(hp_atual, hp_max);
+		
 		return _sprite;
 	}
 	
@@ -70,17 +75,20 @@ var CanvasNpcChild = function(npc_instance) {
 		var destiny_y;
 		var instance = new App.Tween.get(_sprite);
 
-		_.each(movements, function(next, k) {			
+		_.each(movements, function(next, k) {	
 			destiny_x = next[0]*32;
 			destiny_y = next[1]*32;
+			
 			_move(instance, destiny_x,destiny_y,150, function() {
 				previous = movements[k-1] || actual_array;
 				direction = _whichDirection(previous, next)
+			
+			  _hp_bar.update((next[0]*32)-_hp_bar.getWidth()/4, (next[1]*32)-15);
 				
 				_sprite.gotoAndPlay(['move_', direction].join(''))
 				if(next[0] == destination_array[0] && next[1] == destination_array[1]) {
 					_sprite.gotoAndPlay(['stand_',direction].join(''));
-				}					
+				}
 				//console.log('movement -> ', previous, next)
 			})		
 		})
@@ -116,6 +124,14 @@ var CanvasNpcChild = function(npc_instance) {
 		instance.to({ 'y' : target_y, 'x' : target_x}, duration).call(function() {
 			_callback();
 		});
+	}	
+	
+	var _receive_damage = function(damage_value) {
+	  var max_hp = _npc_instance.getNpc().getMaxHp();
+	  var actual_hp = _npc_instance.getHp();
+	  
+	  _npc_instance.setHp(actual_hp-damage_value)
+	  _hp_bar.hit(damage_value)
 	}
 	
 	_init(npc_instance);
@@ -125,6 +141,7 @@ var CanvasNpcChild = function(npc_instance) {
 		getSprite:function() {
 			return _sprite;
 		},
-		walkPath:_walk_path
+		walkPath:_walk_path,
+		receiveDamage:_receive_damage
 	}
 }
