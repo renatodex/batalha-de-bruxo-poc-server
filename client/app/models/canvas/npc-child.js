@@ -131,7 +131,12 @@ var CanvasNpcChild = function(npc_instance) {
 	  var actual_hp = _npc_instance.getHp();
 	  
 	  _npc_instance.setHp(actual_hp-damage_value)
-	  _hp_bar.hit(damage_value)
+	  
+	  if(!_hp_bar.hit(damage_value)) {
+	    App.getStage().removeChild(_sprite);
+	    _hp_bar.remove();
+	    //TODO: REMOVER DO DISPLAY LIST
+    }
 	}
 	
 	_init(npc_instance);

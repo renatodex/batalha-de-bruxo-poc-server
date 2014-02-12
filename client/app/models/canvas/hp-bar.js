@@ -57,8 +57,13 @@ var HpBar = function(hp, maxhp) {
 	}
 	
 	var _hit = function(damage) {
-		_hp -= damage;
-	  _update(_x, _y);
+		if(_hp-damage > 0){
+		  _hp -= damage;
+		  _update(_x, _y);
+		  return true;
+	  } else {
+	    return false;
+	  }
 	}
 	
 	var _update = function(x, y) {
@@ -73,6 +78,7 @@ var HpBar = function(hp, maxhp) {
 	return {
 		hit:_hit,
 		update:_update,
+		remove:_remove,
 		getShape:function() {
 			return _shape;
 		},
