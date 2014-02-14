@@ -167,6 +167,11 @@ var CanvasNpcChild = function(npc_instance) {
     }
 	}
 	
+	var _unload = function() {
+	  App.getStage().removeChild(_sprite);
+	  _hp_bar.remove();
+	}
+	
 	_init(npc_instance);
 	
 	return {
@@ -175,6 +180,7 @@ var CanvasNpcChild = function(npc_instance) {
 			return _sprite;
 		},
 		walkPath:_walk_path,
-		receiveDamage:_receive_damage
+		receiveDamage:_receive_damage,
+		unload:_unload
 	}
 }

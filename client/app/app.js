@@ -145,7 +145,7 @@ socket.on('logon', function(npc_data) {
 			console.log(display_list);
 			_.each(display_list, function(v,k) {
 				if(v.getAccountEmail() == email) {
-					App.getStage().removeChild(v.getCanvas().getSprite());
+				  v.getCanvas().unload();
 				}
 			})
 		});		
