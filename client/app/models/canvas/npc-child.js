@@ -1,3 +1,18 @@
+var Action = Backbone.Model.extend({
+    defaults: {
+        callback: function(){}
+    }
+});
+
+var Queue = Backbone.Collection.extend({
+     model: Action,
+     process: function() {
+       if(this.at(0) == undefined) return;
+       this.at(0).get('callback')();
+       this.remove(this.at(0));
+     }
+ })
+ 
 var CanvasNpcChild = function(npc_instance) {	
 	
 	var _npc_instance;
@@ -5,6 +20,8 @@ var CanvasNpcChild = function(npc_instance) {
 	var _spritesheet;
 	var _tween;
 	var _hp_bar;
+  
+  var _queue = new Queue();
 	
 	var _init = function(npc_instance) {
 		_npc_instance = npc_instance;
@@ -51,6 +68,8 @@ var CanvasNpcChild = function(npc_instance) {
 		_sprite = new App.Sprite(_spritesheet);
 		_tween = new App.Tween.get(_sprite)
 		
+		_init_tick();
+		
 		var hp_atual = _npc_instance.getHp();
 		var hp_max = _npc_instance.getNpc().getMaxHp();
 		_hp_bar = new HpBar(hp_atual, hp_max);
@@ -60,6 +79,12 @@ var CanvasNpcChild = function(npc_instance) {
 	
 	var DURATION=80;
 
+  var _init_tick = function() {
+    _sprite.addEventListener('tick', function() {
+      _queue.process();
+    });
+  }
+
 	// Como mover o NPC no Mapa?
 	// 1) quando o player clicar no mapa, o canvas tem que saber como traduzir essa coordenada para um Vertice do Grid - OK
 	// 2) após obter o array [x,y] do ponto, o evento deve saber o ponto [x-inicial,y-inicial] e o [x-final,y-final], - OK
@@ -67,19 +92,23 @@ var CanvasNpcChild = function(npc_instance) {
 	// 4) para cada um dos pontos do PathFinding, o evento deve saber como converte-los para X,Y reais e executar uma ação de Tween.
 
 	var _walk_path = function(actual_array, destination_array) {
+	  //App.Tween.removeAllTweens();
+	  //App.Tween.removeTweens(_instance)
+	  
 		var path = new Pathfinding(15,15)
 		var movements = path.calculateMove(actual_array, destination_array);
 
 		var previous, direction;
 		var destiny_x;
 		var destiny_y;
-		var instance = new App.Tween.get(_sprite);
-
+		
+		_instance = new App.Tween.get(_sprite, {override:true});
+      
 		_.each(movements, function(next, k) {	
 			destiny_x = next[0]*32;
 			destiny_y = next[1]*32;
-			
-			_move(instance, destiny_x,destiny_y,150, function() {
+		
+			_move(_instance, destiny_x,destiny_y,150, function() {
 				previous = movements[k-1] || actual_array;
 				direction = _whichDirection(previous, next)
 			
@@ -89,11 +118,8 @@ var CanvasNpcChild = function(npc_instance) {
 				if(next[0] == destination_array[0] && next[1] == destination_array[1]) {
 					_sprite.gotoAndPlay(['stand_',direction].join(''));
 				}
-				//console.log('movement -> ', previous, next)
 			})		
 		})
-		
-		console.log('animacao setada', npc_instance.getNpcTileX(), npc_instance.getNpcTileY())		
 	}
 	
 	var _whichDirection = function(previous, next) {
@@ -115,15 +141,17 @@ var CanvasNpcChild = function(npc_instance) {
 	}
 
 	var _move = function(instance, target_x, target_y, duration, callback) {
+	   
 		var _duration = duration || 150;
 		var _callback = callback || function(){};
 		
-		_npc_instance.setNpcTileX(parseInt(target_x / 32));
-		_npc_instance.setNpcTileY(parseInt(target_y / 32));				
-		
-		instance.to({ 'y' : target_y, 'x' : target_x}, duration).call(function() {
-			_callback();
-		});
+		_queue.add(new Action({callback:function(){				
+  		instance.to({ 'y' : target_y, 'x' : target_x}, 80).call(function() {
+  		  _npc_instance.setNpcTileX(parseInt(target_x / 32));
+    		_npc_instance.setNpcTileY(parseInt(target_y / 32));
+  			_callback();
+  		});
+    }}))
 	}	
 	
 	var _receive_damage = function(damage_value) {

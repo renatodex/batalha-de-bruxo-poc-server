@@ -102,6 +102,7 @@ socket.on('logon', function(npc_data) {
 		App.getStage().canvas.addEventListener('click', function(e) {
 			var _destination = [parseInt(e.layerX/32), parseInt(e.layerY/32) -1]
 			var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
+			console.log('atual',_actual);
 
 			npc_child.getCanvas().walkPath(_actual,_destination);
 			

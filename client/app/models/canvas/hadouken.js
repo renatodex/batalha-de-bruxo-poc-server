@@ -54,7 +54,7 @@ var CanvasHadouken = function(x, y) {
 		var movements = path.calculateMove(actual_array, destination_array);
 		
 		_.each(movements, function(v, k) {
-			_move(tween, v[0]*32, v[1]*32, 600, function() {
+			_move(tween, v[0]*32, v[1]*32, 200, function() {
 
 				console.log('ANDOU..', v);
 
