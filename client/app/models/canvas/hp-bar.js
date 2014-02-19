@@ -1,36 +1,3 @@
-var shape;
-var maxhp = 100;
-var hpbar_width = 64;
-var hp = 100;
-
-function drawHp() {
-var pixels = hp*hpbar_width/maxhp;
-
-shape = new createjs.Shape();
-shape.graphics.beginFill('#ff0000');
-shape.graphics.drawRect(0,0,pixels,10);
-App.getStage().addChild(shape);
-}
-
-function removeHp() {
-App.getStage().removeChild(shape);
-}
-
-function hit(damage) {
-    hp -= damage;
-    removeHp();
-    drawHp();
-}
-
-//new App.Tween(shape).to({x:96},150).call();
-
-//hp=100
-//drawHp(100);
-//hit(10)
-//removeHp();
-
-
-
 var HpBar = function(hp, maxhp) {
 	var _shape;
 	var _hp = 0;
