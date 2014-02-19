@@ -20,6 +20,7 @@ var CanvasNpcChild = function(npc_instance) {
 	var _spritesheet;
 	var _tween;
 	var _hp_bar;
+	var _direction;
   
   var _queue = new Queue();
 	
@@ -117,6 +118,7 @@ var CanvasNpcChild = function(npc_instance) {
 				_sprite.gotoAndPlay(['move_', direction].join(''))
 				if(next[0] == destination_array[0] && next[1] == destination_array[1]) {
 					_sprite.gotoAndPlay(['stand_',direction].join(''));
+					_direction = direction;
 				}
 			})		
 		})
@@ -181,6 +183,9 @@ var CanvasNpcChild = function(npc_instance) {
 		},
 		walkPath:_walk_path,
 		receiveDamage:_receive_damage,
-		unload:_unload
+		unload:_unload,
+		getDirection:function() {
+		  return _direction;
+		}
 	}
 }

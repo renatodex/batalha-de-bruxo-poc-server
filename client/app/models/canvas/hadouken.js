@@ -19,7 +19,7 @@ var CanvasHadouken = function(x, y) {
 		
 		_sprite = new App.Sprite(_spritesheet);
 		_sprite.x = x*32;
-		_sprite.y = (y+1)*32;
+		_sprite.y = y*32;
 		
 		_sprite.addEventListener('tick', function() {
 			_.each(display_list, function(npc, k) {
@@ -36,7 +36,7 @@ var CanvasHadouken = function(x, y) {
 		return _sprite;
 	};
 
-	var _cast = function() {
+	var _cast = function(direction) {
 		var path = new Pathfinding(15, 15);
 		
 		var actual_array = [];
@@ -49,7 +49,18 @@ var CanvasHadouken = function(x, y) {
 		var tween = new App.Tween(_sprite);
 		
 		var destination_array = actual_array;
-		destination_array[0] += _duration;
+		
+		if(direction == "up") {
+		  destination_array[1] -= _duration;
+		} else if(direction == "down") {
+		  destination_array[1] += _duration;
+		} else if(direction == "left") {
+		  destination_array[0] -= _duration;
+		} else {
+		  destination_array[0] += _duration;
+		}
+		
+		//destination_array[0] += _duration;
 
 		var movements = path.calculateMove(actual_array, destination_array);
 		
