@@ -102,6 +102,7 @@ socket.on('logon', function(npc_data) {
 		App.getStage().canvas.addEventListener('click', function(e) {
 			var _destination = [parseInt(e.layerX/32), parseInt(e.layerY/32) -1]
 			var _actual = [npc_child.getNpcTileX(), npc_child.getNpcTileY()]
+			console.log('atual',_actual);
 
 			npc_child.getCanvas().walkPath(_actual,_destination);
 			
@@ -144,23 +145,37 @@ socket.on('logon', function(npc_data) {
 			console.log(display_list);
 			_.each(display_list, function(v,k) {
 				if(v.getAccountEmail() == email) {
-					App.getStage().removeChild(v.getCanvas().getSprite());
+				  v.getCanvas().unload();
 				}
 			})
 		});		
 	}
 })
 
-function castHadouken(x, y) {
-	var golpe = new CanvasHadouken(x+1, y);
+function castHadouken(x, y, direction) {
+  if(direction == "down") {
+    y += 2;
+  }
+  
+  if(direction == "left") {
+    y += 1;
+    x -= 1;
+  }
+  
+  if(direction == "right") {
+    y += 1;
+    x += 1;
+  }
+  
+	var golpe = new CanvasHadouken(x, y);
 	App.getStage().addChild(golpe.getSprite());
-	golpe.cast();	
+	golpe.cast(npc_child.getCanvas().getDirection());	
 }
 
 socket.on('cast-hadouken', function(email) {
 	_.each(display_list, function(v,k) {
 		if(v.getAccountEmail() == email) {
-			castHadouken(v.getNpcTileX(), v.getNpcTileY());
+			castHadouken(v.getNpcTileX(), v.getNpcTileY(), v.getCanvas().getDirection());
 		}
 	})	
 });
@@ -179,7 +194,7 @@ $( window ).unload(function() {
 
 $('body').bind('keydown', function(e) {
 	if(e.keyCode == 32) {
-		castHadouken(npc_child.getNpcTileX(), npc_child.getNpcTileY());
+		castHadouken(npc_child.getNpcTileX(), npc_child.getNpcTileY(), npc_child.getCanvas().getDirection());
 		socket.emit('cast-hadouken', $('.email').val());
 	}
 })
