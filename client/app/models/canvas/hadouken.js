@@ -62,21 +62,26 @@ var CanvasHadouken = function(x, y) {
 		
 		//destination_array[0] += _duration;
 
-		var movements = path.calculateMove(actual_array, destination_array);
-		
-		_.each(movements, function(v, k) {
-			_move(tween, v[0]*32, v[1]*32, 200, function() {
+    try {
+		  var movements = path.calculateMove(actual_array, destination_array);
+		  App.getSound().play('hadouken');
+		  _.each(movements, function(v, k) {
+  			_move(tween, v[0]*32, v[1]*32, 200, function() {
 
-				console.log('ANDOU..', v);
+  				console.log('ANDOU..', v);
 
-				var last = _.last(movements);
+  				var last = _.last(movements);
 
-				if(last == v){
-					App.getStage().removeChild(_sprite);
-				}
+  				if(last == v){
+  					App.getStage().removeChild(_sprite);
+  				}
 
-			});
-		})
+  			});
+  		})
+	  } catch(e) {
+	    console.log('NÃO CONSEGUIU SOLTAR O HADOUKEN..');
+	    App.getStage().removeChild(_sprite);
+	  }
 	};
 
 	var _move = function(instance, target_x, target_y, duration, callback) {

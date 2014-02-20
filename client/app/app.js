@@ -22,6 +22,13 @@ var App = function() {
 		_loader.addEventListener("complete", callback);
 		_loader.loadManifest([{id:"hero", src:"../app/assets/images/hero_sprite.png"}]);
 		_loader.load();
+		
+		
+    createjs.Sound.alternateExtensions = ["mp3"];
+    createjs.Sound.addEventListener("fileload", createjs.proxy(_callback, this));
+    createjs.Sound.registerSound("../app/assets/sounds/hadouken.mp3", "hadouken");
+
+    
 	}
 	
 	return {
@@ -34,6 +41,9 @@ var App = function() {
 		},
 		getTicker : function() {
 			return createjs.Ticker;
+		},
+		getSound  : function() {
+		  return createjs.Sound;
 		},
 		update : function() {
 			_stage.update();
