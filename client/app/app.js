@@ -9,25 +9,21 @@ var App = function() {
 		// grab canvas width and height for later calculations:
 		w = _stage.canvas.width;
 		h = _stage.canvas.height;
-
-		/*manifest = [
-			{src:"assets/runningGrant.png", id:"grant"},
-			{src:"assets/sky.png", id:"sky"},
-			{src:"assets/ground.png", id:"ground"},
-			{src:"assets/parallaxHill1.png", id:"hill"},
-			{src:"assets/parallaxHill2.png", id:"hill2"}
-		];*/
+		
+		var manifest = [
+		  {id:"hero", src:"../app/assets/images/hero_sprite.png"},
+		  {id:"hadouken", src: "../app/assets/sounds/hadouken.mp3", type:createjs.LoadQueue.SOUND}
+		]
 
 		_loader = new createjs.LoadQueue(false);
 		_loader.addEventListener("complete", callback);
-		_loader.loadManifest([{id:"hero", src:"../app/assets/images/hero_sprite.png"}]);
+		_loader.loadManifest(manifest);
 		_loader.load();
 		
-		
-    createjs.Sound.alternateExtensions = ["mp3"];
-    createjs.Sound.addEventListener("fileload", createjs.proxy(_callback, this));
-    createjs.Sound.registerSound("../app/assets/sounds/hadouken.mp3", "hadouken");
-
+		_sound = createjs.Sound;
+    _sound.alternateExtensions = ["mp3"];
+    _sound.addEventListener("fileload", createjs.proxy(_callback, this));
+    _sound.registerManifest(manifest)
     
 	}
 	
