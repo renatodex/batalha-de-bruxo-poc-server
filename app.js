@@ -13,6 +13,7 @@ var BISON = require('bison')
 var app = express();
 
 
+
 //var io = require('socket.io').listen(4000);
 var port = 3000//process.env.PORT || 3000;
 var server = app.listen(port, function() {
@@ -45,7 +46,12 @@ var Account = Backbone.Model.extend({
 	defaults : {
 		name : '',
 		email : '',
-		password : ''
+		password : '',
+		connection_accepted: '',
+		
+		acceptConnection : function() {
+		  this.connection_accepted = true;
+		}
 	}
 });
 
@@ -103,6 +109,45 @@ var NpcChilds = new Backbone.Collection([], {
 });
 // ============================================================
 
+/* Collection de Armazenamento dos npcs da sala  */
+var NpcGameSession = Backbone.Collection.extend ({
+  model: NpcChild,
+  limit: 2,
+  state: 'connection',
+  
+  addNpc: function(npc){
+    if(this.isRoomReady()){
+      this.add(npc);
+      return true;
+    }else{
+      return false;
+    }
+  },
+  isRoomReady: function() {
+    if(this.length < this.limit){
+      return true;
+    }else{
+      return false;
+    }    
+  },
+  verifyConnection: function() {
+    var result = true;
+    var self = this;
+    console.log(this.models);
+    console.log('----------------')
+    _.each(this.models, function(v, k) {
+        if(v.get('connection_accepted') == false || self.isRoomReady()) {
+          result = false
+        }
+    });
+    
+    return result;
+  }
+});
+
+var room = new NpcGameSession([]);
+
+//=============================================================
 app.get('/', routes.index);
 
 var multplayer = [];
@@ -145,7 +190,7 @@ io.sockets.on('connection', function (socket) {
   })
 
   socket.on('npc-child-create', function (data) {
-  		NpcChilds.add(data);
+  	NpcChilds.add(data);
 		console.log('ADDING NEW PLAYER', NpcChilds.toJSON());
 		//socket.broadcast.emit('npc-child-create', data);
 		// quando o npc for criado, precisa haver um broadcast para avisar a todos os clients que entrou um novo npc
@@ -153,20 +198,47 @@ io.sockets.on('connection', function (socket) {
 		console.log('TOTAL PLAYERS', NpcChilds.length);
   });
 
+
+
   socket.on('login', function(email, password) {
-	var result = Accounts.findWhere({
-		email : email,
-		password : password
-	})
+	  var resultAcc = Accounts.findWhere({
+  		email : email,
+  		password : password
+  	})
 	
-	if (result == undefined) {
-		socket.emit('error', 'Login ou senha incorretos!');
-	} else {
-		var result = NpcChilds.findWhere({account_email : email}) || false;
-		socket.emit('logon', result)
-	}
+  	if(room.addNpc(resultAcc)){
+  	  if (resultAcc == undefined) {
+  		  socket.emit('error', 'Login ou senha incorretos!');
+  	  } else {
+  	    var result = NpcChilds.findWhere({account_email : email}) || false;
+  		  socket.emit('logon', result)
+  	  }
+  	}else{
+  	  socket.emit('error', 'A Sala ja esta lotada! SE FUDE!! HA-HA!');
+  	}
+  })
+  
+  socket.on('accept-connection', function(email) {
+	  var resultAcc = Accounts.findWhere({
+  		email : email
+  	})
+  	
+  	if(resultAcc != undefined) {
+  	  resultAcc.set('connection_accepted', true);
+  	  if(room.verifyConnection()) {
+  	    room.state = 'waiting'
+    	}
+    	socket.emit('update-game-state', room.state)
+  	}
   })
 
+  socket.on('accept-waiting', function() {
+    
+  })
+  
+  socket.on('accept-battle', function() {
+    
+  })
 });
 
 
