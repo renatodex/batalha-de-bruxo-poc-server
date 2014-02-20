@@ -98,6 +98,8 @@ socket.on('logon', function(npc_data) {
 	if(npc_data) {
 		// caso não coberto
 	} else {	
+	  var game_cycle = new CanvasGameCycle();
+	  
 		console.log('FIRST TIME ON')	
 		window.npc_child = FacadeNpcChild.createNpcInstance(_.random(0,99999));
 		npc_child.setAccountEmail($('.email').val());		
@@ -205,3 +207,9 @@ $('body').bind('keydown', function(e) {
 	}
 })
 
+socket.on('update-game-state', function(state) {
+  $('#the-game-state').removeClass();
+  $('#the-game-state').addClass(state);
+  $('#gameStats').text(state);
+  // executar estado recebido do servidor
+})

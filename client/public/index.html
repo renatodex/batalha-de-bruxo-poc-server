@@ -1,13 +1,14 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Batalha do BRUXO 2 2</title>			
+		<title><%= title %> <%= version %></title>			
 	</head>
 	
 	<body>
 		<style>
 			* {
 				font-family:Helvetica;
+				list-style: none;
 			}
 		
 			.grid {
@@ -34,6 +35,35 @@
 			.login .register {
 				border-top:1px dashed #eee;
 			}
+			
+			#stats{
+				margin-left: 30px;
+				display: inline-block;
+				vertical-align: top;
+			}
+			
+			#stats ul.statistcs{
+				padding: 20px 0;
+			}
+			
+			#stats ul.statistcs li{
+				border-bottom: 1px solid #ccc;
+				color: #000;
+			}
+			
+			#stats ul.statistcs li.connection{
+				background-color: lightcoral;
+			}
+			#stats ul.statistcs li.waiting{
+				background-color: lightyellow;
+			}
+			#stats ul.statistcs li.battle{
+				background-color: lightgreen;
+			}
+			#stats ul.statistcs li.gameover{
+				background-color: lightgray;
+			}
+			
 		</style>
 		
 		<div class="login">
@@ -62,6 +92,17 @@
 	
 		<div class="grid"></div>
 		<canvas id="alcides" width="500" height="500" style="border:1px solid #000"></canvas>
+		<div id="stats">
+			<ul class="statistcs">
+				<li id="the-game-state">
+					<p><strong>Estado:</strong><span id="gameStats"></span></p>
+				</li>
+				<li>
+					<p><strong>Jogadores:</strong> </p>
+					<ul id="players"></ul>
+				</li>
+			</ul>
+		</div>
 		<script src="socket.io/socket.io.js"></script>
 		<script src="../app/vendor/jquery.js"></script>				
 		<script src="../app/vendor/underscore.js"></script>		
@@ -87,6 +128,7 @@
 		<!--<script src="../app/models/facade/map-handler.js"></script>	-->			
 		<script src="../app/models/facade/game.js"></script>
 				
+		<script src="../app/models/canvas/game-cycle.js"></script>				
 		<script src="../app/models/canvas/npc-child.js"></script>
 		<script src="../app/models/canvas/hadouken.js"></script>
 		<script src="../app/models/canvas/hp-bar.js"></script>
